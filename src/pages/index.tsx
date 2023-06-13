@@ -6,11 +6,9 @@ import { SignInButton, SignOutButton, useUser, SignIn } from "@clerk/nextjs";
 // I'm lost
 const Home: NextPage = () => {
 
-  const hello = api.example.hello.useQuery({ text: "from tRPC" });
-
   const user = useUser();
 
-  const {data} = api.example.getAll.useQuery();
+  const {data} = api.posts.getAll.useQuery();
 
   //console.log(hello.data);
 
@@ -23,8 +21,11 @@ const Home: NextPage = () => {
       </Head>
       <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c]">
         <div>
-          <h1> Sign In</h1>
-          <SignInButton />
+          {!user.isSignedIn && <SignInButton />}
+          {!!user.isSignedIn && <SignOutButton />}
+        </div>
+        <div>
+          {data?.map((post) => (<div key={post.id}>{post.content}</div>))}
         </div>
       </main>
     </>
