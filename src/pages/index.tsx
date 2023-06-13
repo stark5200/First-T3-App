@@ -46,7 +46,7 @@ const Home: NextPage = () => {
             {user.isSignedIn && <CreatePostWizard />}  
           </div>
           <div className="flex flex-col">
-            {data?.map((post) => (<div className="p-8 border-b border-slate-400" key={post.id}>{post.content}</div>))}
+            {[...data, ...data]?.map(({post, author}) => (<div className="p-8 border-b border-slate-400" key={post.id}>{post.content}</div>))}
           </div>
         </div>
       </main>
