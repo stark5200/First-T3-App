@@ -8,12 +8,14 @@ import { SignInButton, SignOutButton, useUser, SignIn } from "@clerk/nextjs";
 const CreatePostWizard = () => {
   const {user} = useUser();
 
+  console.log(user);
+
   if (!user) return null;
 
   return ( 
-    <div className="flex gap-3">
+    <div className="flex gap-3 w-full">
       <img src={user.profileImageUrl} alt="Profile image" className="w-20 h-20 rounded-full"/>
-      <input placeholder="Type some emojis!" className="bg-transparent"/>
+      <input placeholder="Type some emojis!" className="grow bg-transparent outline-none"/>
     </div> 
   )  
 }
