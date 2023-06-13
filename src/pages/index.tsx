@@ -12,8 +12,6 @@ const Home: NextPage = () => {
 
   if (!data || isLoading) return <div>Loading...</div>
 
-  //console.log(hello.data);
-
   return (
     <>
       <Head>
