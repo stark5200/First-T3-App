@@ -19,7 +19,14 @@ const CreatePostWizard = () => {
 
   return ( 
     <div className="flex gap-3 w-full">
-      <Image src={user.profileImageUrl} alt="Profile image" className="w-20 h-20 rounded-full"/>
+      <Image 
+        src={user.profileImageUrl}
+        alt="Profile image" 
+        className="w-20 h-20 rounded-full"
+        width={56}
+        height={56}
+        placeholder="blur"
+      />
       <input placeholder="Type some emojis!" className="grow bg-transparent outline-none"/>
     </div> 
   )  
@@ -31,7 +38,14 @@ const PostView = (props: PostWithUser) => {
   const { post, author } = props;
   return (
     <div key={post.id} className="border-b border-slate-400 p-4 gap-3 flex">
-      <Image src={author.profileImageUrl} alt="Profile image" className="w-20 h-20 rounded-full"/>
+      <Image 
+        src={author.profileImageUrl}
+        alt="Profile image"
+        className="w-20 h-20 rounded-full"
+        width={56}
+        height={56}
+        placeholder="blur"
+      />
       <div className="flex flex-col">
         <div className="flex text-slate-300 gap-1">
           <span>{`@${author.username}`}</span>
