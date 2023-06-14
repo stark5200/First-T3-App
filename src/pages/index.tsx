@@ -6,6 +6,7 @@ import { SignInButton, useUser} from "@clerk/nextjs";
 import dayjs from "dayjs";
 import  Image  from "next/image"
 import relativeTime from "dayjs/plugin/relativeTime"
+import { LoadingSpinner } from "~/components/loading";
 // I'm lost
 
 dayjs.extend(relativeTime);
@@ -25,7 +26,6 @@ const CreatePostWizard = () => {
         className="w-20 h-20 rounded-full"
         width={56}
         height={56}
-        placeholder="blur"
       />
       <input placeholder="Type some emojis!" className="grow bg-transparent outline-none"/>
     </div> 
@@ -44,7 +44,6 @@ const PostView = (props: PostWithUser) => {
         className="w-20 h-20 rounded-full"
         width={56}
         height={56}
-        placeholder="blur"
       />
       <div className="flex flex-col">
         <div className="flex text-slate-300 gap-1">
@@ -63,7 +62,7 @@ const Home: NextPage = () => {
 
   const {data, isLoading} = api.posts.getAll.useQuery();
 
-  if (!data || isLoading) return <div>Loading...</div>
+  if (!data || isLoading) return <LoadingSpinner />
 
   return (
     <>
