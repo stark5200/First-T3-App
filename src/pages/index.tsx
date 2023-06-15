@@ -6,7 +6,7 @@ import { SignInButton, useUser} from "@clerk/nextjs";
 import dayjs from "dayjs";
 import  Image  from "next/image"
 import relativeTime from "dayjs/plugin/relativeTime"
-import { LoadingSpinner } from "~/components/loading";
+import { LoadingPage } from "~/components/loading";
 // I'm lost
 
 dayjs.extend(relativeTime);
@@ -62,7 +62,7 @@ const Home: NextPage = () => {
 
   const {data, isLoading} = api.posts.getAll.useQuery();
 
-  if (!data || isLoading) return <LoadingSpinner />
+  if (!data || isLoading) return <LoadingPage />
 
   return (
     <>
