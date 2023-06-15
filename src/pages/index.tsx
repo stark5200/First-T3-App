@@ -1,13 +1,13 @@
 import { type NextPage } from "next";
 import Head from "next/head";
-import Link from "next/link";
+//import Link from "next/link";
 import { RouterOutputs, api } from "~/utils/api";
 import { SignInButton, useUser} from "@clerk/nextjs";
 import dayjs from "dayjs";
 import  Image  from "next/image"
 import relativeTime from "dayjs/plugin/relativeTime"
 import { LoadingPage } from "~/components/loading";
-import { error } from "console";
+//import { error } from "console";
 // I'm lost
 
 dayjs.extend(relativeTime);
@@ -60,7 +60,7 @@ const PostView = (props: PostWithUser) => {
 const Feed = () => {
   const {data, isLoading: postsLoading } = api.posts.getAll.useQuery();
 
-  if (!postsLoading) return <LoadingPage />;
+  if (postsLoading) return <LoadingPage />;
 
   if (!data) return <div> Something went wrong. </div>
 
