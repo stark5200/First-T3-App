@@ -7,6 +7,7 @@ import dayjs from "dayjs";
 import  Image  from "next/image"
 import relativeTime from "dayjs/plugin/relativeTime"
 import { LoadingPage } from "~/components/loading";
+import { error } from "console";
 // I'm lost
 
 dayjs.extend(relativeTime);
@@ -56,13 +57,30 @@ const PostView = (props: PostWithUser) => {
   )
 }
 
+const Feed = () => {
+  const {data, isLoading: postsLoading } = api.posts.getAll.useQuery();
+
+  if (!postsLoading) return <LoadingPage />;
+
+  if (!data) return <div> Something went wrong. </div>
+
+  return (
+    <div className="flex flex-col">
+      {[...data, ...data]?.map((fullPost) => (<PostView {...fullPost} key={fullPost.post.id}/>))}
+    </div>
+  )
+
+}
+
 const Home: NextPage = () => {
 
-  const user = useUser();
+  const { isLoaded: userLoaded, isSignedIn } = useUser();
 
-  const {data, isLoading} = api.posts.getAll.useQuery();
+  //start fetching
+  api.posts.getAll.useQuery();
 
-  if (!data || isLoading) return <LoadingPage />
+  // weird behaviour
+  if ( !userLoaded ) return <div />;
 
   return (
     <>
@@ -74,16 +92,15 @@ const Home: NextPage = () => {
       <main className="flex justify-center h-screen">
         <div className="bg-red-200 h-full w-full border-slate-400 md:max-w-2xl border-x">
           <div className="border-b border-slate-400 p-4 flex justify-center">
-            {!user.isSignedIn && (
+            {!isSignedIn && (
               <div className="flex justify-center">
                 <SignInButton />
               </div>
             )}  
-            {user.isSignedIn && <CreatePostWizard />}  
+            {isSignedIn && <CreatePostWizard />}  
           </div>
-          <div className="flex flex-col">
-            {[...data, ...data]?.map((fullPost) => (<PostView {...fullPost} key={fullPost.post.id}/>))}
-          </div>
+          
+          <Feed />
         </div>
       </main>
     </>
