@@ -13,7 +13,9 @@ import { LoadingPage } from "~/components/loading";
 dayjs.extend(relativeTime);
 
 const CreatePostWizard = () => {
-  const {user} = useUser();
+  const { user } = useUser();
+
+  const { mutate } = api.posts.create.useMutation();
 
   console.log(user);
 
