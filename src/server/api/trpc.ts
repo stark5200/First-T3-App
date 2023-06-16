@@ -12,6 +12,7 @@ import superjson from "superjson";
 import { ZodError } from "zod";
 import { prisma } from "~/server/db";
 import { getAuth } from "@clerk/nextjs/dist/types/server-helpers.server";
+import { TRPCError } from "@trpc/server";
 
 
 /**
@@ -27,9 +28,11 @@ export const createTRPCContext = (opts: CreateNextContextOptions) => {
 
   const sesh = getAuth(req);
 
+  const user = sesh.user;
+
   return {
     prisma,
-    session: user, 
+    currentUser: user, 
   };
 };
 
@@ -80,13 +83,17 @@ export const publicProcedure = t.procedure;
 
 const enforceUserIsAuthed = t.middleware(async ({ ctx, next }) => {
 
-  if (!ctx.session) {
-    throw new Error("Not Authenticated");
+  if (!ctx.currentUser) {
+    throw new TRPCError({
+      code: "UNAUTHORIZED", 
+    });
   } 
 
   return next({
     ctx: {
-      session: ctx.session, 
+      session: ctx.currentUser, 
     },
   });
 });
+
+export const privateProcedure = t.procedure.use(enforceUserIsAuthed); 
