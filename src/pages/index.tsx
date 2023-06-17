@@ -6,8 +6,10 @@ import { SignInButton, useUser} from "@clerk/nextjs";
 import dayjs from "dayjs";
 import  Image  from "next/image"
 import relativeTime from "dayjs/plugin/relativeTime"
-import { LoadingPage } from "~/components/loading";
+import { LoadingPage, LoadingSpinner } from "~/components/loading";
 import { useState } from "react";
+import toast from "react-hot-toast";
+ 
 //import { error } from "console";
 // I'm lost
 
@@ -25,6 +27,14 @@ const CreatePostWizard = () => {
       setInput(""); 
       void ctx.posts.getAll.invalidate();
     },
+    onError: (e) => {
+      const errorMessage = e.data?.zodError?.fieldErrors.content;
+      if (errorMessage && errorMessage[0]) {
+        toast.error(errorMessage[0]);
+      } else {
+        toast.error("Failed to post! please try again later.");
+      }
+    }
   });
 
   console.log(user);
@@ -45,9 +55,28 @@ const CreatePostWizard = () => {
         className="grow bg-transparent outline-none" 
         value={input}
         onChange={(e) => setInput(e.target.value)}
+
+        onKeyDown={(e) => {
+          if (e.key === "Enter") {
+            e.preventDefault();
+            if ( input !== "") {
+              mutate({ content: input });
+            }
+          }
+        }}
         disabled={isPosting}
       />
-      <button onClick={() => mutate({ content: input })}>Post-</button>
+      {input !== "" && !isPosting && (
+        <button onClick={() => mutate({ content: input })} >
+          Post
+        </button>
+      )}
+
+      { isPosting && (
+        <div className="flex justify-center items-center">
+          <LoadingSpinner size={20} />
+        </div>
+      )}
     </div> 
   )  
 }
