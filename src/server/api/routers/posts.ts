@@ -15,10 +15,10 @@ const filterUserForClient = (user: User) => {
 import { Ratelimit } from "@upstash/ratelimit"; // for deno: see above
 import { Redis } from "@upstash/redis";
 
-// Create a new ratelimiter, that allows 10 requests per 10 seconds
+// Create a new ratelimiter, that allows 5 requests per 1 minute
 const ratelimit = new Ratelimit({
   redis: Redis.fromEnv(),
-  limiter: Ratelimit.slidingWindow(10, "10 s"),
+  limiter: Ratelimit.slidingWindow(5, "1 m"),
   analytics: true,
   /**
    * Optional prefix for the keys used in redis. This is useful if you want to share a redis
@@ -69,7 +69,13 @@ export const postsRouter = createTRPCRouter({
     })
   )
   .mutation(async ({ctx, input}) => {
+
     const authorId = ctx.userId;
+
+    const { success } = await ratelimit.limit(authorId);
+
+    if (!success) throw new TRPCError({code: "TOO_MANY_REQUESTS"});
+
     const post = await ctx.prisma.post.create({
       data: {
         authorId, 
