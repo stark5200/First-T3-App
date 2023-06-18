@@ -4,6 +4,13 @@ import { api } from "~/utils/api";
 import { useUser} from "@clerk/nextjs";
 
 const ProfilePage: NextPage = () => {
+  const {data, isLoading} = api.profile.getUserByUsername.useQuery({
+    username: "stark5200", 
+  });
+
+  if (isLoading) return <div>Loading...</div>
+
+  if (!data) return <div>404</div>;
 
   return (
     <>
@@ -11,7 +18,7 @@ const ProfilePage: NextPage = () => {
         <title>Profile</title>
       </Head>
       <main className="flex justify-center h-screen">
-        <div>User Profile View</div>
+        <div>{data.username}</div>
       </main>
     </>
   );
