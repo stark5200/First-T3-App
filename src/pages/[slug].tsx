@@ -3,6 +3,7 @@ import Head from "next/head";
 import { api } from "~/utils/api";
 import { useUser} from "@clerk/nextjs";
 
+
 const ProfilePage: NextPage = () => {
   const {data, isLoading} = api.profile.getUserByUsername.useQuery({
     username: "stark5200", 
@@ -23,5 +24,19 @@ const ProfilePage: NextPage = () => {
     </>
   );
 };
+
+/*
+bunch of deprecated bullshit
+
+export const getStaticProps = async (context) => {
+
+  const ssg = createProxySSGHelpers({
+    router: appRouter, 
+    ctx: await createContext(), 
+    tranformer: superjson, 
+  });
+
+}
+*/
 
 export default ProfilePage;
